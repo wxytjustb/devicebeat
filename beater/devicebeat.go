@@ -2,8 +2,6 @@ package beater
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/elastic/beats/libbeat/beat"
 	"github.com/elastic/beats/libbeat/common"
 	"github.com/elastic/beats/libbeat/logp"
@@ -15,7 +13,8 @@ import (
 type devicebeat struct {
 	done   chan struct{}
 	config config.Config
-	client beat.Client
+	Client beat.Client
+	controllerList	[]*PingerController
 }
 
 // New creates an instance of devicebeat.
@@ -37,35 +36,37 @@ func (bt *devicebeat) Run(b *beat.Beat) error {
 	logp.Info("devicebeat is running! Hit CTRL-C to stop it.")
 
 	var err error
-	bt.client, err = b.Publisher.Connect()
+	bt.Client, err = b.Publisher.Connect()
 	if err != nil {
 		return err
 	}
 
-	ticker := time.NewTicker(bt.config.Period)
-	counter := 1
+	// 根据Devices配置生成controllers
+	bt.controllerList = make([]*PingerController, len(bt.config.Devices), len(bt.config.Devices))
+
+	for index, device := range bt.config.Devices{
+		if (device.Method == "ping"){
+			controller, _ := NewPingerController(b, bt.Client, device, bt.config.Period)
+			bt.controllerList[index] = controller
+		}
+	}
+
+
 	for {
 		select {
-		case <-bt.done:
-			return nil
-		case <-ticker.C:
+			case <-bt.done:
+				return nil
 		}
-
-		event := beat.Event{
-			Timestamp: time.Now(),
-			Fields: common.MapStr{
-				"type":    b.Info.Name,
-				"counter": counter,
-			},
-		}
-		bt.client.Publish(event)
-		logp.Info("Event sent")
-		counter++
 	}
+
+	return nil
 }
 
 // Stop stops devicebeat.
 func (bt *devicebeat) Stop() {
-	bt.client.Close()
+	bt.Client.Close()
 	close(bt.done)
+	for _, controller := range bt.controllerList{
+		controller.Stop()
+	}
 }
