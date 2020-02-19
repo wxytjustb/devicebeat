@@ -1,0 +1,35 @@
+{
+	"comment": "",
+	"ignore": "",
+	"package": [
+		{
+			"checksumSHA1": "VzF0DOpW4V8KGwY/lxXiRXcIfpo=",
+			"path": "github.com/sparrc/go-ping",
+			"revision": "4e5b6552494c8005c60de6c60b50ebaefc69e592",
+			"revisionTime": "2019-06-05T20:23:35Z"
+		},
+		{
+			"checksumSHA1": "UjDLUH02Z0gxtZpnZspR2wcc/v4=",
+			"path": "golang.org/x/net",
+			"revision": "16171245cfb220d5317888b716d69c1fb4e7992b",
+			"revisionTime": "2020-01-30T10:58:50Z"
+		},
+		{
+			"path": "golang.org/x/net/icpm",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "8pN5oLcn1POUtq3SbDTFo0oE+Ck=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "cb0a6d8edb6c3528b01a0be84a5fe513dbf880a6",
+			"revisionTime": "2020-02-18T22:41:24Z"
+		},
+		{
+			"checksumSHA1": "JgSs7/xWOWLelvkL4hTsqjraAeo=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "cb0a6d8edb6c3528b01a0be84a5fe513dbf880a6",
+			"revisionTime": "2020-02-18T22:41:24Z"
+		}
+	],
+	"rootPath": "github.com/wxytjustb/devicebeat"
+}

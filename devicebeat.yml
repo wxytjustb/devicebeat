@@ -4,11 +4,14 @@
 
 devicebeat:
   # Defines how often an event is sent to the output
-  period: 2s
+  period: 1s
 
   # 定义监控的设备信息以及方式
-  # [{"address": "10.10.100.2", "port": 0, "method": "ping"}]
-  devices: [{"name": "测试机器", "address": "10.10.100.2", "port": 0, "method": "ping"}]
+  # [{"name": "测试机器", "address": "10.10.100.2", "port": 0, "method": "ping"}]
+  devices: []
+
+  # 定义区域
+  work_zone: "undefined"
 
 #================================ General =====================================
 

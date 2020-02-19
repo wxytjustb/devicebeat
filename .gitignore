@@ -5,3 +5,5 @@
 /devicebeat
 /devicebeat.test
 *.pyc
+
+devicebeat

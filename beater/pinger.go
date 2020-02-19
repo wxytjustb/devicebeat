@@ -20,20 +20,21 @@ type PingerController struct{
 	pinger			*ping.Pinger
 	done			chan struct{}
 	is_start_new	chan bool
-	period 			time.Duration
+	config 			config.Config
 	data			chan PingData
 }
 
-func NewPingerController(bt *beat.Beat, client beat.Client, device config.Device, period time.Duration) (*PingerController, error){
+func NewPingerController(bt *beat.Beat, client beat.Client, device config.Device, config config.Config) (*PingerController, error){
 	controller := &PingerController{
 		bt:				bt,
 		client:			client,
 		device:			device,
 		done:			make(chan struct{}),
 		is_start_new:	make(chan bool),
-		period:			period,
+		config:			config,
 		data:			make(chan PingData),
 	}
+
 
 	_, error := controller.newPinger()
 
@@ -46,7 +47,7 @@ func (controller *PingerController) Run() error{
 
 	// 根据计时器采集数据，如没没有数据，发一次掉线的event
 
-	ticker := time.NewTicker(controller.period)
+	ticker := time.NewTicker(controller.config.Period)
 
 	for{
 		select {
@@ -68,6 +69,7 @@ func (controller *PingerController) Run() error{
 									"rtt": 	   	data.rtt.Seconds(),
 									"address":	controller.device.Address,
 									"name": controller.device.Name,
+									"work_zone": controller.config.WorkZone,
 								},
 							}
 							controller.client.Publish(event)
@@ -79,6 +81,7 @@ func (controller *PingerController) Run() error{
 									"rtt": 	   	0,
 									"address":	controller.device.Address,
 									"name": controller.device.Name,
+									"work_zone": controller.config.WorkZone,
 									//"counter": counter,
 								},
 							}
@@ -94,7 +97,7 @@ func (controller *PingerController) Run() error{
 
 func (controller *PingerController) newPinger() (*ping.Pinger, error){
 
-	
+
 
 	pinger, error := ping.NewPinger(controller.device.Address)
 

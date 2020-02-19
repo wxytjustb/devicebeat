@@ -41,12 +41,13 @@ func (bt *devicebeat) Run(b *beat.Beat) error {
 		return err
 	}
 
+
 	// 根据Devices配置生成controllers
 	bt.controllerList = make([]*PingerController, len(bt.config.Devices), len(bt.config.Devices))
 
 	for index, device := range bt.config.Devices{
 		if (device.Method == "ping"){
-			controller, _ := NewPingerController(b, bt.Client, device, bt.config.Period)
+			controller, _ := NewPingerController(b, bt.Client, device, bt.config)
 			bt.controllerList[index] = controller
 		}
 	}
