@@ -1,6 +1,6 @@
-# {Beat}
+# DeviceBeat
 
-Welcome to {Beat}.
+搜集硬件设备信息
 
 Ensure that this folder is at the following location:
 `${GOPATH}/src/github.com/wxytjustb/devicebeat`
